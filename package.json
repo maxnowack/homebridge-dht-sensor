@@ -27,7 +27,7 @@
   },
   "dependencies": {
     "babel-core": "6.14.0",
-    "node-dht-sensor": "git+https://github.com/sweetpi/node-dht-sensor.git#master"
+    "node-dht-sensor": "0.0.29"
   },
   "devDependencies": {
     "babel-cli": "6.14.0",

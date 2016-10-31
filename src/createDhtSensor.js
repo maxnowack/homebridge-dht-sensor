@@ -26,22 +26,23 @@ export default function createDhtSensor({ Service, Characteristic }) {
     }
 
     getValue(what, callback) {
-      const result = sensorLib.readSpec(this.type, this.pin)
-      if (result.humidity !== 0 && result.temperature !== 0) {
-        this.humidity = result.humidity
-        this.temperature = result.temperature
-        this.lastUpdate = Date.now()
-      }
+      sensorLib.read(this.type, this.pin, (err, temperature = 0, humidity = 0) => {
+        if (!err && humidity !== 0 && temperature !== 0) {
+          this.humidity = humidity
+          this.temperature = temperature
+          this.lastUpdate = Date.now()
+        }
 
-      if (Date.now() - this.lastUpdate >= this.cacheTimeout) {
-        return callback(new Error('cannot get sensor data'), null)
-      }
+        if (Date.now() - this.lastUpdate >= this.cacheTimeout) {
+          return callback(new Error('cannot get sensor data'), null)
+        }
 
-      switch (what) {
-        case 'temperature': return callback(null, this.temperature)
-        case 'humidity': return callback(null, this.humidity)
-        default: return callback(new Error(`cannot get unknown property '${what}'`), null)
-      }
+        switch (what) {
+          case 'temperature': return callback(null, this.temperature)
+          case 'humidity': return callback(null, this.humidity)
+          default: return callback(new Error(`cannot get unknown property '${what}'`), null)
+        }
+      })
     }
 
     getServices() {
