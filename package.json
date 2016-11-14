@@ -27,7 +27,7 @@
   },
   "dependencies": {
     "babel-core": "6.18.2",
-    "node-dht-sensor": "0.0.31"
+    "node-dht-sensor": "0.0.32"
   },
   "devDependencies": {
     "babel-cli": "6.18.0",
