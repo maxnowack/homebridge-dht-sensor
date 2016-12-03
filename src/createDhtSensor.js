@@ -8,6 +8,7 @@ export default function createDhtSensor({ Service, Characteristic }) {
       this.type = config.sensorType
       this.pin = config.gpioPin
       this.cacheTimeout = config.cacheTimeout || (60 * 1000) // 1 minute
+      this.pollingInterval = config.pollingInterval || 5000
 
       this.temperature = 0
       this.humidity = 0
@@ -23,6 +24,18 @@ export default function createDhtSensor({ Service, Characteristic }) {
       this.temperatureService
         .getCharacteristic(Characteristic.CurrentTemperature)
         .on('get', this.getValue.bind(this, 'temperature'))
+
+      if (this.pollingInterval) {
+        setInterval(() => {
+          this.getValue(null, (err, { humidity, temperature }) => {
+            this.humidityService
+              .setCharacteristic(Characteristic.CurrentRelativeHumidity, humidity)
+
+            this.temperatureService
+              .setCharacteristic(Characteristic.CurrentTemperature, temperature)
+          })
+        }, this.pollingInterval)
+      }
     }
 
     getValue(what, callback) {
