@@ -21,6 +21,18 @@
   "bugs": {
     "url": "http://github.com/maxnowack/homebridge-dht-sensor/issues"
   },
+  "files": [
+    "dist"
+  ],
+  "eslintConfig": {
+    "extends": ["airbnb-base"],
+    "parser": "babel-eslint",
+    "rules": {
+      "semi": 0,
+      "no-param-reassign": [2, { "props": false }]
+    }
+  },
+  "babel": { "presets": ["es2015", "stage-0"] },
   "engines": {
     "node": ">=0.12.0",
     "homebridge": ">=0.2.0"
