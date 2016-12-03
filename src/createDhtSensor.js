@@ -40,7 +40,7 @@ export default function createDhtSensor({ Service, Characteristic }) {
         switch (what) {
           case 'temperature': return callback(null, this.temperature)
           case 'humidity': return callback(null, this.humidity)
-          default: return callback(new Error(`cannot get unknown property '${what}'`), null)
+          default: return callback(null, { humidity: this.humidity, temperature: this.temperature })
         }
       })
     }
