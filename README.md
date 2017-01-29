@@ -1,7 +1,16 @@
 ## homebridge-dht-sensor
 Homebridge plugin for DHT temperature and humidity sensors
 
-### usage
+## installation
+``` bash
+$ npm install homebridge-dht-sensor
+```
+
+## usage
+This module depends on the [BCM2835](http://www.airspayce.com/mikem/bcm2835/) library that must be installed on your board before you can actually use this module.
+
+You have to specify the `sensorType` (11 for DHT11; 22 for DHT22 or AM2302) and the `gpioPin` to which the data pin of the sensor is connected.
+
 ````json
 {
   "bridge": {
