@@ -1,6 +1,9 @@
 import sensorLib from 'node-dht-sensor'
 
 export default function createDhtSensor({ Service, Characteristic }) {
+  const CurrentRelativeHumidity = Characteristic.CurrentRelativeHumidity
+  const CurrentTemperature = Characteristic.CurrentTemperature
+
   return class DhtSensor {
     constructor(log, config) {
       this.log = log
@@ -17,22 +20,23 @@ export default function createDhtSensor({ Service, Characteristic }) {
       this.humidityService = new Service.HumiditySensor(this.name)
       this.temperatureService = new Service.TemperatureSensor(this.name)
 
-      this.humidityService
-        .getCharacteristic(Characteristic.CurrentRelativeHumidity)
-        .on('get', this.getValue.bind(this, 'humidity'))
 
-      this.temperatureService
-        .getCharacteristic(Characteristic.CurrentTemperature)
+      this.humidityService.getCharacteristic(CurrentRelativeHumidity)
+        .on('get', this.getValue.bind(this, 'humidity'))
+      this.temperatureService.getCharacteristic(CurrentTemperature)
         .on('get', this.getValue.bind(this, 'temperature'))
+
 
       if (this.pollingInterval) {
         setInterval(() => {
-          this.getValue(null, (err, { humidity, temperature }) => {
-            this.humidityService
-              .setCharacteristic(Characteristic.CurrentRelativeHumidity, humidity)
+          this.getValue(null, (err, { humidity, temperature } = {}) => {
+            if (err) {
+              this.log(err)
+              return
+            }
 
-            this.temperatureService
-              .setCharacteristic(Characteristic.CurrentTemperature, temperature)
+            this.humidityService.setCharacteristic(CurrentRelativeHumidity, humidity)
+            this.temperatureService.setCharacteristic(CurrentTemperature, temperature)
           })
         }, this.pollingInterval)
       }
@@ -47,7 +51,7 @@ export default function createDhtSensor({ Service, Characteristic }) {
         }
 
         if (Date.now() - this.lastUpdate >= this.cacheTimeout) {
-          return callback(new Error('cannot get sensor data'), null)
+          return callback(err || new Error('cannot get sensor data'), null)
         }
 
         switch (what) {
