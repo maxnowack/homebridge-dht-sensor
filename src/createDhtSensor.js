@@ -29,7 +29,8 @@ export default function createDhtSensor({ Service, Characteristic }) {
 
       if (this.pollingInterval) {
         setInterval(() => {
-          this.getValue(null, (err, { humidity, temperature } = {}) => {
+          this.getValue(null, (err, values) => {
+            const { humidity, temperature } = values || {}
             if (err) {
               this.log(err)
               return
