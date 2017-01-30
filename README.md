@@ -3,7 +3,7 @@ Homebridge plugin for DHT temperature and humidity sensors
 
 ## installation
 ``` bash
-$ npm install homebridge-dht-sensor
+$ npm install -g homebridge-dht-sensor
 ```
 
 ## usage
