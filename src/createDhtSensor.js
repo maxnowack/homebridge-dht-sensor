@@ -25,6 +25,10 @@ export default function createDhtSensor({ Service, Characteristic }) {
         .on('get', this.getValue.bind(this, 'humidity'))
       this.temperatureService.getCharacteristic(CurrentTemperature)
         .on('get', this.getValue.bind(this, 'temperature'))
+        .setProps({
+          minValue: -100,
+          maxValue: 100,
+        })
 
 
       if (this.pollingInterval) {
