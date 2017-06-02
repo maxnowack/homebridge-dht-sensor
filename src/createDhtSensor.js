@@ -24,6 +24,10 @@ export default function createDhtSensor({ Service, Characteristic }) {
       this.humidityService.getCharacteristic(CurrentRelativeHumidity)
         .on('get', this.getValue.bind(this, 'humidity'))
       this.temperatureService.getCharacteristic(CurrentTemperature)
+        .setProps({
+          minValue: -100,
+          maxValue: 100,
+        })
         .on('get', this.getValue.bind(this, 'temperature'))
         .setProps({
           minValue: -100,
